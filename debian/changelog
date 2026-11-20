@@ -1,0 +1,6 @@
+uniflow-ipp-server (1.0.0-1) unstable; urgency=medium
+
+  * Initial Debian/Ubuntu packaging.
+
+ -- Robert Hawdon <robert@hawdon.net>  Fri, 20 Nov 2026 17:53:43 +0000
+

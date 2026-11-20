@@ -1,0 +1,5 @@
+uniflow-ipp-server              usr/bin/
+config.toml                     etc/uniflow-ipp/
+ppd/uniflow-ipp.ppd             usr/share/uniflow-ipp/ppd/
+scripts/install-cups-queue.sh   usr/share/uniflow-ipp/scripts/
+

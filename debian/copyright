@@ -1,0 +1,15 @@
+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: uniflow-ipp-server
+Source: https://github.com/roberthawdon/uniflow-ipp-server
+
+Files: *
+Copyright: <year> <upstream copyright holder>
+License: Expat
+
+Files: debian/*
+Copyright: 2026 Your Name <you@example.com>
+License: Expat
+
+License: Expat
+ <paste the MIT text from LICENSE here>
+

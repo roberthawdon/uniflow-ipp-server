@@ -1,0 +1,48 @@
+#!/usr/bin/make -f
+export GO111MODULE = off
+export GOFLAGS     = -trimpath
+export GOCACHE     = $(CURDIR)/.cache/go-build
+export HOME        = $(CURDIR)/.cache/home
+
+GOMODPATH := github.com/uniflow-ipp-server
+BUILDDIR  := $(CURDIR)/_build
+export GOPATH = $(BUILDDIR):/usr/share/gocode
+
+UPSTREAM_VERSION := $(shell dpkg-parsechangelog -S Version | sed 's/-[^-]*$$//')
+
+%:
+	dh $@ --buildsystem=pybuild --sourcedirectory=login-app
+
+override_dh_auto_configure:
+	mkdir -p $(BUILDDIR)/src/$(GOMODPATH)
+	cp -a cmd internal $(BUILDDIR)/src/$(GOMODPATH)/
+	dh_auto_configure
+
+override_dh_auto_build:
+	cd $(BUILDDIR)/src/$(GOMODPATH) && \
+	    go build -ldflags "-X main.Version=$(UPSTREAM_VERSION)" \
+	    -o $(CURDIR)/uniflow-ipp-server ./cmd/uniflow-ipp-server
+	dh_auto_build
+
+override_dh_auto_test:
+ifeq (,$(filter nocheck,$(DEB_BUILD_OPTIONS)))
+	cd $(BUILDDIR)/src/$(GOMODPATH) && go test ./...
+	cd login-app && PYTHONPATH=src:tests python3 -m unittest test_protocol test_diagnostics
+endif
+
+override_dh_auto_install:
+	dh_auto_install --destdir=debian/uniflow-login
+
+override_dh_installtmpfiles:
+	cp contrib/tmpfiles/uniflow-ipp.conf debian/uniflow-ipp-server.tmpfiles
+	dh_installtmpfiles
+
+override_dh_installsystemd:
+	cp contrib/systemd/uniflow-ipp.service debian/uniflow-ipp-server.uniflow-ipp.service
+	dh_installsystemd --name=uniflow-ipp --no-enable --no-start
+
+override_dh_clean:
+	dh_clean
+	rm -rf .cache _build uniflow-ipp-server \
+	    debian/uniflow-ipp-server.tmpfiles \
+	    debian/uniflow-ipp-server.uniflow-ipp.service

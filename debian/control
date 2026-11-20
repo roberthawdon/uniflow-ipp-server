@@ -1,0 +1,39 @@
+Source: uniflow-ipp-server
+Section: utils
+Priority: optional
+Maintainer: Robert Hawdon <robert@hawdon.net>
+Build-Depends: debhelper-compat (= 13),
+               dh-sequence-python3,
+               pybuild-plugin-pyproject,
+               python3-all,
+               python3-setuptools,
+               python3-cryptography,
+               golang-go (>= 2:1.22~),
+               golang-github-burntsushi-toml-dev
+Standards-Version: 4.7.0
+Homepage: https://github.com/roberthawdon/uniflow-ipp-server
+Rules-Requires-Root: no
+
+Package: uniflow-ipp-server
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, adduser, cups-daemon, cups-client, systemd
+Recommends: cups-filters
+Suggests: uniflow-login
+Description: unofficial IPP server connecting CUPS to uniFLOW Online
+ Accepts PDF print jobs from a local CUPS queue on a loopback address and
+ can upload them to a uniFLOW Online Secure Print queue.
+ .
+ This is an independent project, not affiliated with NT-ware. The default
+ configuration only holds PDFs locally until cloud access is configured.
+
+Package: uniflow-login
+Architecture: all
+Depends: ${python3:Depends}, ${misc:Depends},
+         python3-pyside6.qtwebenginewidgets,
+         python3-pyside6.qtwidgets,
+         python3-cryptography
+Suggests: uniflow-ipp-server
+Description: Qt login app for the uniFLOW IPP server
+ Performs tenant OAuth sign-in using a tenant .tenantcfg.plist and exports
+ configuration for uniflow-ipp-server.
+

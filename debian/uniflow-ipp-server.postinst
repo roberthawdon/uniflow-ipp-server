@@ -1,0 +1,27 @@
+#!/bin/sh
+set -e
+
+case "$1" in
+configure)
+    # System group and user (idempotent)
+    if ! getent passwd uniflow-ipp >/dev/null; then
+        adduser --system --group --quiet \
+            --home /var/lib/uniflow-ipp --no-create-home \
+            --shell /usr/sbin/nologin \
+            --gecos "uniFLOW IPP Server" uniflow-ipp
+    fi
+    if ! getent group uniflow-ipp >/dev/null; then
+        addgroup --system --quiet uniflow-ipp
+    fi
+
+    # Access to the lp group
+    if getent group lp >/dev/null; then
+        adduser --quiet uniflow-ipp lp
+    fi
+    ;;
+esac
+
+#DEBHELPER#
+
+exit 0
+
