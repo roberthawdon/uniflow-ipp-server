@@ -46,3 +46,7 @@ override_dh_clean:
 	rm -rf .cache _build uniflow-ipp-server \
 	    debian/uniflow-ipp-server.tmpfiles \
 	    debian/uniflow-ipp-server.uniflow-ipp.service
+
+override_dh_dwz:
+	# Go compresses its own DWARF sections, which dwz cannot handle.
+	# Skip dh_dwz, as dh-golang does.
