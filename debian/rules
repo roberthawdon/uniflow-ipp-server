@@ -39,7 +39,7 @@ override_dh_installtmpfiles:
 
 override_dh_installsystemd:
 	cp contrib/systemd/uniflow-ipp.service debian/uniflow-ipp-server.uniflow-ipp.service
-	dh_installsystemd --name=uniflow-ipp --no-enable --no-start
+	dh_installsystemd --name=uniflow-ipp
 
 override_dh_clean:
 	dh_clean
